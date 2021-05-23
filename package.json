@@ -10,7 +10,9 @@
     "test": "jest --collect-coverage"
   },
   "jest": {
-    "setupFilesAfterEnv": ["./tests/setup.js"],
+    "setupFilesAfterEnv": [
+      "./tests/setup.js"
+    ],
     "verbose": true
   },
   "repository": {
@@ -26,6 +28,7 @@
   "dependencies": {
     "config": "^3.3.6",
     "express": "^4.17.1",
+    "joi": "^17.4.0",
     "mysql2": "^2.2.5",
     "sequelize": "^6.6.2"
   },

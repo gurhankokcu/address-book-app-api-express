@@ -11,5 +11,6 @@
         "freezeTableName": true
       }
     }
-  }
+  },
+  "pagesize": 10
 }
