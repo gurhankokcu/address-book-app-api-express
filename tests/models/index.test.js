@@ -6,9 +6,6 @@ describe('models', () => {
   const mockContact = { key: 'value3' }
 
   beforeEach(() => {
-    jest.mock('config', () => ({
-      get: jest.fn().mockImplementation((key) => key)
-    }))
     jest.mock('sequelize', () => jest.fn().mockImplementation(() => {
       return mockSequelize
     }))
@@ -17,10 +14,6 @@ describe('models', () => {
     }))
 
     require('sequelize').DataTypes = mockDataTypes
-  })
-
-  afterEach(() => {
-    jest.restoreAllMocks()
   })
 
   it('should create sequelize instance', () => {

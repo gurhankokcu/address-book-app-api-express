@@ -10,10 +10,6 @@ describe('contacts routes', () => {
     jest.spyOn(express, 'Router').mockImplementation(() => mockRouter)
   })
 
-  afterEach(() => {
-    jest.restoreAllMocks()
-  })
-
   it('should call get function for root path', () => {
     require('../../routes/contacts')
     expect(mockRouter.get.mock.calls.length).toBe(1)

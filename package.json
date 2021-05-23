@@ -9,6 +9,10 @@
     "lint": "eslint .",
     "test": "jest --collect-coverage"
   },
+  "jest": {
+    "setupFilesAfterEnv": ["./tests/setup.js"],
+    "verbose": true
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gurhankokcu/address-book-app-api-express.git"
