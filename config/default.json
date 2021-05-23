@@ -1,3 +1,15 @@
 {
-  "port": 3000
+  "port": 3000,
+  "database": {
+    "database": "address_book",
+    "username": "root",
+    "password": "password",
+    "options": {
+      "host": "127.0.0.1",
+      "dialect": "mysql",
+      "define": {
+        "freezeTableName": true
+      }
+    }
+  }
 }

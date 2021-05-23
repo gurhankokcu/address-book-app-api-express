@@ -1,0 +1,9 @@
+{
+  "default": {
+    "username": "root",
+    "password": "password",
+    "database": "address_book",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
