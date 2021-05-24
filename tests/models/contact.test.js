@@ -15,4 +15,10 @@ describe('contact model', () => {
     expect(mockSequelize.define.mock.calls[0][1]).toHaveProperty('email')
     expect(mockSequelize.define.mock.calls[0][1]).toHaveProperty('notes')
   })
+
+  it('should specify table name', () => {
+    const mockSequelize = { define: jest.fn() }
+    model(mockSequelize, {})
+    expect(mockSequelize.define.mock.calls[0][2].tableName).toBe('contact')
+  })
 })
