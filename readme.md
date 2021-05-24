@@ -25,7 +25,7 @@ $ cd address-book-app-api-express
 $ npm install
 ```
 
-Create MySQL table
+Create MySQL database
 
 ```sql
 CREATE SCHEMA `address_book` DEFAULT CHARACTER SET utf8;
@@ -48,6 +48,8 @@ Start node server
 $ npm start
 ```
 
+Deployed version can be found at [http://address-book-app-api.eu-west-2.elasticbeanstalk.com/](http://address-book-app-api.eu-west-2.elasticbeanstalk.com/)
+
 ## Tests
 
 ESLint is used for checking the code style.
@@ -62,6 +64,8 @@ Jest is used for testing the application.
 $ npm test
 ```
 
+Postman collection is included (`postman-requests.json`). Requests can be imported to test each endpoint with sample data.
+
 ## Credits
 
 * [REST API Tutorial](https://www.restapitutorial.com/lessons/httpmethods.html) is used to confirm paths and http status codes
@@ -69,4 +73,4 @@ $ npm test
 
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[ISC](https://choosealicense.com/licenses/isc/)

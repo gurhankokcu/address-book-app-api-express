@@ -1,0 +1,250 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Address Book App API Express",
+		"_postman_id": "c4de4bb4-c04c-bdba-cdf2-5b078d3f2e00",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Main",
+			"request": {
+				"url": "http://address-book-app-api.eu-west-2.elasticbeanstalk.com/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "List All Contacts",
+			"request": {
+				"url": "http://address-book-app-api.eu-west-2.elasticbeanstalk.com/contacts",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "List All Contacts (2nd page)",
+			"request": {
+				"url": {
+					"raw": "http://address-book-app-api.eu-west-2.elasticbeanstalk.com/contacts?page=2",
+					"protocol": "http",
+					"host": [
+						"address-book-app-api",
+						"eu-west-2",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"contacts"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Filter Contacts (by name)",
+			"request": {
+				"url": {
+					"raw": "http://address-book-app-api.eu-west-2.elasticbeanstalk.com/contacts?name=jack",
+					"protocol": "http",
+					"host": [
+						"address-book-app-api",
+						"eu-west-2",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"contacts"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "jack",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Filter Contacts (by name and phone)",
+			"request": {
+				"url": {
+					"raw": "http://address-book-app-api.eu-west-2.elasticbeanstalk.com/contacts?name=jack&phone=99",
+					"protocol": "http",
+					"host": [
+						"address-book-app-api",
+						"eu-west-2",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"contacts"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "jack",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "phone",
+							"value": "99",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Filter Contacts (by name or phone)",
+			"request": {
+				"url": {
+					"raw": "http://address-book-app-api.eu-west-2.elasticbeanstalk.com/contacts?name=jack&phone=99&operator=or",
+					"protocol": "http",
+					"host": [
+						"address-book-app-api",
+						"eu-west-2",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"contacts"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "jack",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "phone",
+							"value": "99",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "operator",
+							"value": "or",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Contact",
+			"request": {
+				"url": "http://address-book-app-api.eu-west-2.elasticbeanstalk.com/contacts/1",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Contact",
+			"request": {
+				"url": "http://address-book-app-api.eu-west-2.elasticbeanstalk.com/contacts",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Example Name\",\n\t\"phone\": \"123456789\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Contact",
+			"request": {
+				"url": "http://address-book-app-api.eu-west-2.elasticbeanstalk.com/contacts/51",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"New Name\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Contact",
+			"request": {
+				"url": "http://address-book-app-api.eu-west-2.elasticbeanstalk.com/contacts/51",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"New Name\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
