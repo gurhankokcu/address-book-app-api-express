@@ -261,8 +261,7 @@ describe('contacts controller', () => {
       await require('../../controllers/contacts').addContact(mockReq, mockRes)
       expect(mockRes.json.mock.calls.length).toBe(1)
       expect(mockRes.json.mock.calls[0][0].error).toBe(true)
-      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
-      expect(mockRes.json.mock.calls[0][0].details).toContain('name')
+      expect(mockRes.json.mock.calls[0][0].message).toBe('No data!')
     })
 
     it('should return error if body is empty', async () => {
@@ -377,6 +376,157 @@ describe('contacts controller', () => {
         ...mockReq.body,
         createdAt: 'createdAt'
       })
+    })
+  })
+
+  describe('edit contact', () => {
+    const initialContactData = {
+      id: 5,
+      name: 'Hollie Graham',
+      company: 'Turner, Fox and Jones',
+      address: 'Studio 54 Rogers Mills West Abigailton CH64 3TH',
+      phone: '+44(0)2467 427810',
+      email: 'hollie_graham@gmail.com',
+      notes: 'Real estate agent, Flat 84 King Plains',
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
+      update: () => {}
+    }
+    const updatedContactData = {
+      id: 5,
+      name: 'name',
+      company: 'Turner, Fox and Jones',
+      address: 'Studio 54 Rogers Mills West Abigailton CH64 3TH',
+      phone: '+44(0)2467 427810',
+      email: 'hollie_graham@gmail.com',
+      notes: 'Real estate agent, Flat 84 King Plains',
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
+    }
+    const mockReq = { params: {}, body: {} }
+
+    beforeEach(() => {
+      jest.spyOn(mockModels.Contact, 'findByPk').mockImplementation((id) => {
+        if (id === 5) {
+          return initialContactData
+        }
+        return null
+      })
+      jest.spyOn(initialContactData, 'update').mockImplementation(() => updatedContactData)
+      mockReq.params = {}
+      mockReq.body = {}
+    })
+
+    it('should return error if body is undefined', async () => {
+      delete mockReq.body
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('No data!')
+    })
+
+    it('should return error if body is empty', async () => {
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('at least 1 key')
+    })
+
+    it('should return error if name is not valid', async () => {
+      mockReq.body.name = 'te"xt'
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('name')
+    })
+
+    it('should return error if company is not valid', async () => {
+      mockReq.body.company = 'te"xt'
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('company')
+    })
+
+    it('should return error if address is not valid', async () => {
+      mockReq.body.address = 'te"xt'
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('address')
+    })
+
+    it('should return error if phone is not valid', async () => {
+      mockReq.body.phone = 'text'
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('phone')
+    })
+
+    it('should return error if email is not valid', async () => {
+      mockReq.body.email = 'text'
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('email')
+    })
+
+    it('should return error if notes is not valid', async () => {
+      mockReq.body.notes = 'te"xt'
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('notes')
+    })
+
+    it('should return error if id is undefined', async () => {
+      mockReq.body.name = 'name'
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('id')
+    })
+
+    it('should return error if id is not valid', async () => {
+      mockReq.params.id = 'text'
+      mockReq.body.name = 'name'
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('id')
+    })
+
+    it('should return error if id not found', async () => {
+      mockReq.params.id = 8
+      mockReq.body.name = 'name'
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockModels.Contact.findByPk.mock.calls.length).toBe(1)
+      expect(mockModels.Contact.findByPk.mock.calls[0][0]).toBe(mockReq.params.id)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Contact not found!')
+    })
+
+    it('should update contact', async () => {
+      mockReq.params.id = 5
+      mockReq.body.name = 'name'
+      await require('../../controllers/contacts').editContact(mockReq, mockRes)
+      expect(mockModels.Contact.findByPk.mock.calls.length).toBe(1)
+      expect(mockModels.Contact.findByPk.mock.calls[0][0]).toBe(mockReq.params.id)
+      expect(initialContactData.update.mock.calls.length).toBe(1)
+      expect(initialContactData.update.mock.calls[0][0]).toEqual({ name: 'name' })
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0]).toBe(updatedContactData)
     })
   })
 })

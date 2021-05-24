@@ -28,12 +28,20 @@ describe('contacts routes', () => {
     expect(mockRouter.get.mock.calls[1][1]).toBe(controller.getContact)
   })
 
-  it('should create post method to create contacts', () => {
+  it('should create post method to create a contact', () => {
     require('../../routes/contacts')
     const controller = require('../../controllers/contacts')
-    expect(mockRouter.post.mock.calls.length).toBe(1)
+    expect(mockRouter.post.mock.calls.length).toBe(2)
     expect(mockRouter.post.mock.calls[0][0]).toBe('/')
     expect(mockRouter.post.mock.calls[0][1]).toBe(controller.addContact)
+  })
+
+  it('should create post method to edit a contact', () => {
+    require('../../routes/contacts')
+    const controller = require('../../controllers/contacts')
+    expect(mockRouter.post.mock.calls.length).toBe(2)
+    expect(mockRouter.post.mock.calls[1][0]).toBe('/:id')
+    expect(mockRouter.post.mock.calls[1][1]).toBe(controller.editContact)
   })
 
   it('should return router', () => {

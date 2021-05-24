@@ -26,6 +26,15 @@ const createSchema = Joi.object({
   notes: Joi.string().pattern(/^[a-zA-Z0-9\-, ]{1,500}$/)
 })
 
+const editSchema = Joi.object({
+  name: Joi.string().pattern(/^[a-zA-Z0-9 ]{1,50}$/),
+  company: Joi.string().pattern(/^[a-zA-Z0-9\-, ]{1,100}$/),
+  address: Joi.string().pattern(/^[a-zA-Z0-9\-, ]{1,200}$/),
+  phone: Joi.string().pattern(/^[0-9()+ ]{1,20}$/),
+  email: Joi.string().email().max(200),
+  notes: Joi.string().pattern(/^[a-zA-Z0-9\-, ]{1,500}$/)
+}).min(1)
+
 async function listContacts (req, res) {
   const { value, error } = listSchema.validate(req.query)
   if (error) {
@@ -77,7 +86,13 @@ async function getContact (req, res) {
 }
 
 async function addContact (req, res) {
-  const { value, error } = createSchema.validate(req.body || {})
+  if (!req.body) {
+    return res.json({
+      error: true,
+      message: 'No data!'
+    })
+  }
+  const { value, error } = createSchema.validate(req.body)
   if (error) {
     return res.json({
       error: true,
@@ -89,8 +104,43 @@ async function addContact (req, res) {
   res.json(contact)
 }
 
+async function editContact (req, res) {
+  if (!req.body) {
+    return res.json({
+      error: true,
+      message: 'No data!'
+    })
+  }
+  const { value, error } = editSchema.validate(req.body)
+  if (error) {
+    return res.json({
+      error: true,
+      message: 'Validation error!',
+      details: error.message
+    })
+  }
+  const getSchemaResult = getSchema.validate(req.params)
+  if (getSchemaResult.error) {
+    return res.json({
+      error: true,
+      message: 'Validation error!',
+      details: getSchemaResult.error.message
+    })
+  }
+  const contact = await Contact.findByPk(getSchemaResult.value.id)
+  if (!contact) {
+    return res.json({
+      error: true,
+      message: 'Contact not found!'
+    })
+  }
+  const updatedContact = await contact.update(value)
+  res.json(updatedContact)
+}
+
 module.exports = {
   listContacts,
   getContact,
-  addContact
+  addContact,
+  editContact
 }
