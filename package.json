@@ -4,6 +4,7 @@
   "description": "Address Book App API",
   "main": "index.js",
   "scripts": {
+    "build": "./build.sh",
     "migrate": "sequelize-cli db:migrate --env default",
     "seed": "sequelize-cli db:seed:all --env default",
     "lint": "eslint .",
