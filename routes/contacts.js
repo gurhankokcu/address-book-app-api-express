@@ -8,7 +8,7 @@ const controller = require('../controllers/contacts')
 router.get('/', controller.listContacts)
 router.get('/:id', controller.getContact)
 router.post('/', controller.addContact)
-router.post('/:id', controller.editContact)
+router.patch('/:id', controller.editContact)
 router.delete('/:id', controller.deleteContact)
 
 module.exports = router

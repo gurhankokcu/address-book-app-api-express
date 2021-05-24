@@ -6,6 +6,7 @@ describe('contacts routes', () => {
   const mockRouter = {
     get: jest.fn(),
     post: jest.fn(),
+    patch: jest.fn(),
     delete: jest.fn()
   }
 
@@ -32,17 +33,17 @@ describe('contacts routes', () => {
   it('should create post method to create a contact', () => {
     require('../../routes/contacts')
     const controller = require('../../controllers/contacts')
-    expect(mockRouter.post.mock.calls.length).toBe(2)
+    expect(mockRouter.post.mock.calls.length).toBe(1)
     expect(mockRouter.post.mock.calls[0][0]).toBe('/')
     expect(mockRouter.post.mock.calls[0][1]).toBe(controller.addContact)
   })
 
-  it('should create post method to edit a contact', () => {
+  it('should create patch method to edit a contact', () => {
     require('../../routes/contacts')
     const controller = require('../../controllers/contacts')
-    expect(mockRouter.post.mock.calls.length).toBe(2)
-    expect(mockRouter.post.mock.calls[1][0]).toBe('/:id')
-    expect(mockRouter.post.mock.calls[1][1]).toBe(controller.editContact)
+    expect(mockRouter.patch.mock.calls.length).toBe(1)
+    expect(mockRouter.patch.mock.calls[0][0]).toBe('/:id')
+    expect(mockRouter.patch.mock.calls[0][1]).toBe(controller.editContact)
   })
 
   it('should create delete method to delete a contact', () => {
