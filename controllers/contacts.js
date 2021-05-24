@@ -66,23 +66,28 @@ async function listContacts (req, res) {
   res.json(contacts)
 }
 
-async function getContact (req, res) {
-  const { value, error } = getSchema.validate(req.params)
+async function validateIdAndGetContact (reqParams) {
+  const { value, error } = getSchema.validate(reqParams)
   if (error) {
-    return res.json({
+    return {
       error: true,
       message: 'Validation error!',
       details: error.message
-    })
+    }
   }
   const contact = await Contact.findByPk(value.id)
   if (!contact) {
-    return res.json({
+    return {
       error: true,
       message: 'Contact not found!'
-    })
+    }
   }
-  res.json(contact)
+  return contact
+}
+
+async function getContact (req, res) {
+  const result = await validateIdAndGetContact(req.params)
+  res.json(result)
 }
 
 async function addContact (req, res) {
@@ -119,22 +124,11 @@ async function editContact (req, res) {
       details: error.message
     })
   }
-  const getSchemaResult = getSchema.validate(req.params)
-  if (getSchemaResult.error) {
-    return res.json({
-      error: true,
-      message: 'Validation error!',
-      details: getSchemaResult.error.message
-    })
+  const result = await validateIdAndGetContact(req.params)
+  if (result.error) {
+    return res.json(result)
   }
-  const contact = await Contact.findByPk(getSchemaResult.value.id)
-  if (!contact) {
-    return res.json({
-      error: true,
-      message: 'Contact not found!'
-    })
-  }
-  const updatedContact = await contact.update(value)
+  const updatedContact = await result.update(value)
   res.json(updatedContact)
 }
 
