@@ -8,12 +8,21 @@ const { Contact } = require('../models')
 const querySchema = Joi.object({
   page: Joi.number().min(1).default(1),
   operator: Joi.string().valid('and', 'or').default('and'),
-  name: Joi.string().pattern(/^[a-zA-Z0-9]{1,30}$/),
-  phone: Joi.string().pattern(/^[0-9]{1,30}$/),
-  email: Joi.string().pattern(/^[a-zA-Z0-9@.+_-]{1,30}$/)
+  name: Joi.string().pattern(/^[a-zA-Z0-9 ]{1,50}$/),
+  phone: Joi.string().pattern(/^[0-9()+ ]{1,20}$/),
+  email: Joi.string().pattern(/^[a-zA-Z0-9@.+_-]{1,200}$/)
 })
 
-async function listContacts (req, res, next) {
+const createSchema = Joi.object({
+  name: Joi.string().pattern(/^[a-zA-Z0-9 ]{1,50}$/).required(),
+  company: Joi.string().pattern(/^[a-zA-Z0-9\-, ]{1,100}$/),
+  address: Joi.string().pattern(/^[a-zA-Z0-9\-, ]{1,200}$/),
+  phone: Joi.string().pattern(/^[0-9()+ ]{1,20}$/).required(),
+  email: Joi.string().email().max(200),
+  notes: Joi.string().pattern(/^[a-zA-Z0-9\-, ]{1,500}$/)
+})
+
+async function listContacts (req, res) {
   const { value, error } = querySchema.validate(req.query)
   if (error) {
     return res.json({
@@ -44,6 +53,20 @@ async function listContacts (req, res, next) {
   res.json(contacts)
 }
 
+async function addContact (req, res) {
+  const { value, error } = createSchema.validate(req.body || {})
+  if (error) {
+    return res.json({
+      error: true,
+      message: 'Validation error!',
+      details: error.message
+    })
+  }
+  const contact = await Contact.create(value)
+  res.json(contact)
+}
+
 module.exports = {
-  listContacts
+  listContacts,
+  addContact
 }
