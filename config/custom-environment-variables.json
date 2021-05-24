@@ -1,0 +1,12 @@
+{
+  "port": "PORT",
+  "database": {
+    "database": "DB_NAME",
+    "username": "DB_USER",
+    "password": "DB_PASS",
+    "options": {
+    "host": "DB_HOST"
+    }
+  },
+  "pagesize": "PAGESIZE"
+}
