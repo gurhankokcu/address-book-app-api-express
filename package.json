@@ -1,6 +1,6 @@
 {
   "name": "address-book-app-api-express",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Address Book App API",
   "main": "index.js",
   "scripts": {
