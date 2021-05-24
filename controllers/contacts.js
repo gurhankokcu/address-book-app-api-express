@@ -132,9 +132,21 @@ async function editContact (req, res) {
   res.json(updatedContact)
 }
 
+async function deleteContact (req, res) {
+  const result = await validateIdAndGetContact(req.params)
+  if (result.error) {
+    return res.json(result)
+  }
+  await result.destroy()
+  res.json({
+    message: 'Contact deleted successfully!'
+  })
+}
+
 module.exports = {
   listContacts,
   getContact,
   addContact,
-  editContact
+  editContact,
+  deleteContact
 }

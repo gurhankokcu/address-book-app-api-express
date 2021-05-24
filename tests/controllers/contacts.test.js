@@ -529,4 +529,60 @@ describe('contacts controller', () => {
       expect(mockRes.json.mock.calls[0][0]).toBe(updatedContactData)
     })
   })
+
+  describe('delete contact', () => {
+    const contactData = {
+      id: 5,
+      destroy: () => {}
+    }
+    const mockReq = { params: {} }
+
+    beforeEach(() => {
+      jest.spyOn(mockModels.Contact, 'findByPk').mockImplementation((id) => {
+        if (id === 5) {
+          return contactData
+        }
+        return null
+      })
+      jest.spyOn(contactData, 'destroy')
+      mockReq.params = {}
+    })
+
+    it('should return error if id is undefined', async () => {
+      await require('../../controllers/contacts').deleteContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('id')
+    })
+
+    it('should return error if id is not valid', async () => {
+      mockReq.params.id = 'text'
+      await require('../../controllers/contacts').deleteContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('id')
+    })
+
+    it('should return error if id not found', async () => {
+      mockReq.params.id = 8
+      await require('../../controllers/contacts').deleteContact(mockReq, mockRes)
+      expect(mockModels.Contact.findByPk.mock.calls.length).toBe(1)
+      expect(mockModels.Contact.findByPk.mock.calls[0][0]).toBe(mockReq.params.id)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Contact not found!')
+    })
+
+    it('should return success message', async () => {
+      mockReq.params.id = 5
+      await require('../../controllers/contacts').deleteContact(mockReq, mockRes)
+      expect(mockModels.Contact.findByPk.mock.calls.length).toBe(1)
+      expect(mockModels.Contact.findByPk.mock.calls[0][0]).toBe(mockReq.params.id)
+      expect(contactData.destroy.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Contact deleted successfully!')
+    })
+  })
 })

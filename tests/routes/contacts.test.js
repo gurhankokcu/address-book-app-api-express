@@ -5,7 +5,8 @@ const express = require('express')
 describe('contacts routes', () => {
   const mockRouter = {
     get: jest.fn(),
-    post: jest.fn()
+    post: jest.fn(),
+    delete: jest.fn()
   }
 
   beforeEach(() => {
@@ -42,6 +43,14 @@ describe('contacts routes', () => {
     expect(mockRouter.post.mock.calls.length).toBe(2)
     expect(mockRouter.post.mock.calls[1][0]).toBe('/:id')
     expect(mockRouter.post.mock.calls[1][1]).toBe(controller.editContact)
+  })
+
+  it('should create delete method to delete a contact', () => {
+    require('../../routes/contacts')
+    const controller = require('../../controllers/contacts')
+    expect(mockRouter.delete.mock.calls.length).toBe(1)
+    expect(mockRouter.delete.mock.calls[0][0]).toBe('/:id')
+    expect(mockRouter.delete.mock.calls[0][1]).toBe(controller.deleteContact)
   })
 
   it('should return router', () => {
