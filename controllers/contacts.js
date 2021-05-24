@@ -5,12 +5,16 @@ const Joi = require('joi')
 const Op = require('sequelize').Op
 const { Contact } = require('../models')
 
-const querySchema = Joi.object({
+const listSchema = Joi.object({
   page: Joi.number().min(1).default(1),
   operator: Joi.string().valid('and', 'or').default('and'),
   name: Joi.string().pattern(/^[a-zA-Z0-9 ]{1,50}$/),
   phone: Joi.string().pattern(/^[0-9()+ ]{1,20}$/),
   email: Joi.string().pattern(/^[a-zA-Z0-9@.+_-]{1,200}$/)
+})
+
+const getSchema = Joi.object({
+  id: Joi.number().required()
 })
 
 const createSchema = Joi.object({
@@ -23,7 +27,7 @@ const createSchema = Joi.object({
 })
 
 async function listContacts (req, res) {
-  const { value, error } = querySchema.validate(req.query)
+  const { value, error } = listSchema.validate(req.query)
   if (error) {
     return res.json({
       error: true,
@@ -53,6 +57,25 @@ async function listContacts (req, res) {
   res.json(contacts)
 }
 
+async function getContact (req, res) {
+  const { value, error } = getSchema.validate(req.params)
+  if (error) {
+    return res.json({
+      error: true,
+      message: 'Validation error!',
+      details: error.message
+    })
+  }
+  const contact = await Contact.findByPk(value.id)
+  if (!contact) {
+    return res.json({
+      error: true,
+      message: 'Contact not found!'
+    })
+  }
+  res.json(contact)
+}
+
 async function addContact (req, res) {
   const { value, error } = createSchema.validate(req.body || {})
   if (error) {
@@ -68,5 +91,6 @@ async function addContact (req, res) {
 
 module.exports = {
   listContacts,
+  getContact,
   addContact
 }

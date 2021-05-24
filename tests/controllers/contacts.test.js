@@ -4,6 +4,7 @@ describe('contacts controller', () => {
   const mockModels = {
     Contact: {
       findAll: () => {},
+      findByPk: () => {},
       create: () => {}
     }
   }
@@ -176,6 +177,66 @@ describe('contacts controller', () => {
           { email: { [Op.like]: '%email%' } }
         ]
       })
+    })
+  })
+
+  describe('get contact', () => {
+    const contactData = {
+      id: 5,
+      name: 'Hollie Graham',
+      company: 'Turner, Fox and Jones',
+      address: 'Studio 54 Rogers Mills West Abigailton CH64 3TH',
+      phone: '+44(0)2467 427810',
+      email: 'hollie_graham@gmail.com',
+      notes: 'Real estate agent, Flat 84 King Plains',
+      createdAt: 'createdAt'
+    }
+    const mockReq = { params: {} }
+
+    beforeEach(() => {
+      jest.spyOn(mockModels.Contact, 'findByPk').mockImplementation((id) => {
+        if (id === 5) {
+          return contactData
+        }
+        return null
+      })
+      mockReq.params = {}
+    })
+
+    it('should return error if id is undefined', async () => {
+      await require('../../controllers/contacts').getContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('id')
+    })
+
+    it('should return error if id is not valid', async () => {
+      mockReq.params.id = 'text'
+      await require('../../controllers/contacts').getContact(mockReq, mockRes)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Validation error!')
+      expect(mockRes.json.mock.calls[0][0].details).toContain('id')
+    })
+
+    it('should return error if id not found', async () => {
+      mockReq.params.id = 8
+      await require('../../controllers/contacts').getContact(mockReq, mockRes)
+      expect(mockModels.Contact.findByPk.mock.calls.length).toBe(1)
+      expect(mockModels.Contact.findByPk.mock.calls[0][0]).toBe(mockReq.params.id)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0].error).toBe(true)
+      expect(mockRes.json.mock.calls[0][0].message).toBe('Contact not found!')
+    })
+
+    it('should return contact', async () => {
+      mockReq.params.id = 5
+      await require('../../controllers/contacts').getContact(mockReq, mockRes)
+      expect(mockModels.Contact.findByPk.mock.calls.length).toBe(1)
+      expect(mockModels.Contact.findByPk.mock.calls[0][0]).toBe(mockReq.params.id)
+      expect(mockRes.json.mock.calls.length).toBe(1)
+      expect(mockRes.json.mock.calls[0][0]).toBe(contactData)
     })
   })
 
